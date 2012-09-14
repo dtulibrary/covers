@@ -1,12 +1,13 @@
 require 'spec_helper'
 
 describe "Apis" do
-=begin
+
+=begin  
   fixtures :users
   ERROR_400 = "The parameters in your request were invalid."
   ERROR_401 = "Missing or invalid API key"
   API_KEY_INVALID="asndaspodkjahsda"
-  
+
   describe "API info requests" do
     it "should contain IIIF compliance level header in response" do
       get("api/#{users(:testuser).api_key}/09064710/info.xml")

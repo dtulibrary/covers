@@ -13,6 +13,11 @@
 
 ActiveRecord::Schema.define(:version => 20120913121921) do
 
+  create_table "cachelogs", :force => true do |t|
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
   create_table "sessions", :force => true do |t|
     t.string   "session_id", :null => false
     t.text     "data"
