@@ -1,8 +1,9 @@
 ImageDeliveryService::Application.routes.draw do
   get "user/index"
   #get "api/index"
-  get "api" => "api#wiki"
   get "/" => "api#wiki"
+  get "api" => "api#wiki"
+  get "api/:api_key" => "api#wiki"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
