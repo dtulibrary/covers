@@ -23,9 +23,10 @@ describe "routing to api" do
   it "should not expose api" do
     { :get => "/api" }.should_not be_routable
   end
-=end
+
   it "should not expose private api controller methods" do
     { :get => "/api/render_404" }.should_not be_routable
     { :get => "/api/render_400" }.should_not be_routable
-  end  
+  end
+=end  
 end
