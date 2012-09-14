@@ -1,0 +1,50 @@
+<h1>Editing user</h1>
+ 
+<%= form_for :user, :url => { :action => :update, :id => @user.api_key },
+:method => :put do |f| %>
+  <% if @user.errors.any? %>
+  <div id="errorExplanation">
+    <h2><%= pluralize(@user.errors.count, "error") %> prohibited
+        this post from being saved:</h2>
+    <ul>
+    <% @user.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+  <% end %>
+  <p>
+    <%= f.label :long_name %><br>
+    <%= f.text_field :ln %>
+  </p>
+  <p>
+    <%= f.label :short_name %><br>
+    <%= f.text_field :sn %>
+  </p>
+  <p>
+    <%= f.label :default_height %><br>
+    <%= f.text_field :default_height %>
+  </p>
+  <p>
+    <%= f.label :default_width %><br>
+    <%= f.text_field :default_width %>
+  </p>
+  <p>
+    <%= f.label :on_missing_image %><br>
+    <%= f.text_field :on_missing_image %>
+  </p>
+  <p>
+    <%= f.label :on_missing_title %><br>
+    <%= f.text_field :on_missing_title %>
+  </p>
+  <p>
+    <%= f.submit %>
+  </p>
+<% end %>
+<%= link_to 'Back', :action => :index %>
+<% if flash[:notice] %>
+  <p class="notice"><%= flash[:notice] %></p>
+<% end %>
+<% if flash[:error] %>
+  <p class="error"><%= flash[:error] %></p>
+<% end %>

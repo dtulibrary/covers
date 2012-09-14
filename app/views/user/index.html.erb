@@ -1,0 +1,12 @@
+<h1>Users</h1>
+<ul>
+<%@users.each do |user|%>
+  <li><%=link_to "#{user.ln} (#{user.sn})", :action => :show, :id => user.api_key%></li>
+<%end%>
+</ul>
+<%=link_to "New user", :action => :new%>
+<br />
+<p>If you want to reset the cache of the application <%=link_to "click here", :action=>:cache_reset,:remote=>true%></p>
+<% if flash[:success] %>
+  <p class="notice"><%= flash[:success] %></p>
+<% end %>

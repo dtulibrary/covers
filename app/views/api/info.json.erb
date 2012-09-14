@@ -1,0 +1,8 @@
+{
+  "identifier" : "<%=@id%>",
+  "width" : <%=@info_width%>,
+  "height" : <%=@info_height%>,
+  "formats" : [ <%@formats.each_with_index do |f,index|%>"<%=f%>"<%if index != @formats.size-1%>,<%end%><%end%>],
+  "qualities" : [ <%@qualities.each_with_index do |q,index|%>"<%=q%>"<%if index != @qualities.size-1%>,<%end%><%end%>],
+  "profile" : "http://library.stanford.edu/iiif/image-api/compliance.html#level1" 
+}

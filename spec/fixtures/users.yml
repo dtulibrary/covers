@@ -1,0 +1,8 @@
+testuser:
+  api_key: MtmB3Z8yNEwmR0CkAYpr
+  sn: tu
+  ln: test user
+  default_height: 120
+  default_width: 90
+  on_missing_image: 200
+  on_missing_title: 200

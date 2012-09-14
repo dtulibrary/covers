@@ -1,0 +1,24 @@
+<h1><%=@user.ln+" (#{@user.sn})"%></h1>
+<p>
+  <strong>API Key:</strong>
+  <%=@user.api_key%>
+</p>
+<p>
+  <strong>Default height:</strong>
+  <%=@user.default_height%>
+</p>
+<p>
+  <strong>Default width:</strong>
+  <%=@user.default_width%>
+</p>
+<p>
+  <strong>On missing image:</strong>
+  <%=@user.on_missing_image%>
+</p>
+<p>
+  <strong>On missing title:</strong>
+  <%=@user.on_missing_title%>
+</p>
+<%= link_to 'Back', :action => :index %>
+<%=link_to "Delete",{:action=>:delete, :id => @user.api_key}, :data => {:confirm=>"Are you sure you want to delete this user?"}%>
+<%=link_to "Edit",{:action=>:edit, :id => @user.api_key}%>
