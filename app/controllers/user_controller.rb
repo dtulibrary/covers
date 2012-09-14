@@ -1,7 +1,8 @@
 require 'securerandom'
 
 class UserController < ApplicationController
-
+  http_basic_authenticate_with :name => API_CONFIG['authentication']['username'], :password => API_CONFIG['authentication']['password']#, :except => [:index, :show]
+  
   attr_accessor :users, :user
   
   def index
@@ -97,5 +98,4 @@ class UserController < ApplicationController
     data[:default_width] = data[:default_width].to_i
     return data,invalid,invalid_param
   end
-  
 end
