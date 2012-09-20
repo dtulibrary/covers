@@ -20,24 +20,24 @@ If you choose to use our reference implementation your proxy should be up and ru
 
 4. Open proxy.xml with your favorite text editing tool and make the following changes.
 
-4a. Insert the path to where you stored the proxy.war file, where it says "INSERT PATH TO WAR"
+5. Insert the path to where you stored the proxy.war file, where it says "INSERT PATH TO WAR FILE"
 
        It should look something like this:
        <Context docBase="path.to.your.war.file/proxy.war" debug="0" crossContext="true" >
 
-4b. Insert your api key where it says "INSERT API KEY".
+6. Insert your api key where it says "INSERT API KEY".
 
        It should look something like this:
        <Environment name="dadscis.apiKey" value="yourApiKey" type="java.lang.String" override="false"/>
 
-4c. Notice the "dadscis.imageServiceUrl" parameter in the proxy.xml file. You can change this configuration to target the another stage in  our development of DADS CIS.
+7. Notice the "dadscis.imageServiceUrl" parameter in the proxy.xml file. You can change this configuration to target the another stage in  our development of DADS CIS.
 
        The different server options can be found on our wiki: https://infoshare.dtv.dk/twiki/bin/view/DADS/CIS
        It should be noted, that the "dadscis.imageServiceUrl" parameter always should point to the api like "http://staging.imageservice.cvt.dk/api"
 
-5. Restart your Tomcat.
+8. Restart your Tomcat.
 
-6. Your proxy is now up and running.
+9. Your proxy is now up and running.
 
        You should now be able to reach your proxy on:
        http://dads.partners.own.server.edu (if you have installed the proxy as a root application)
