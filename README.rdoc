@@ -14,42 +14,30 @@ If you choose to use our reference implementation your proxy should be up and ru
 
 1. Download the .war file containing the latest version of our proxy from https://infoshare.dtv.dk/twiki/bin/view/DADS/CIS
 
-2. Unpack the .war file with your favorite archive manager tool.
+2. Download the proxy configuraion file proxy.xml from https://infoshare.dtv.dk/twiki/bin/view/DADS/CIS
 
-3. Go to the WEB-INF folder at open web.xml with an text editing tool.
+3. Move proxy.xml into your Tomcat configuration directory (like: %TOMCAT_HOME%/conf/Catalina/localhost)
 
-4. Replace the comment "<!-- INSERT YOUR API-KEY HERE -->" with your API key (no quotes needed just replace with plain text).
+4. Open proxy.xml with your favorite text editing tool and make the following changes.
 
-5. Notice the "imageServiceUrl" parameter in the web.xml file. You can change this configuration to target the another stage in  our development of DADS CIS.
+4a. Insert the path to where you stored the proxy.war file, where it says "INSERT PATH TO WAR"
+
+       It should look something like this:
+       <Context docBase="path.to.your.war.file/proxy.war" debug="0" crossContext="true" >
+
+4b. Insert your api key where it says "INSERT API KEY".
+
+       It should look something like this:
+       <Environment name="dadscis.apiKey" value="yourApiKey" type="java.lang.String" override="false"/>
+
+4c. Notice the "dadscis.imageServiceUrl" parameter in the proxy.xml file. You can change this configuration to target the another stage in  our development of DADS CIS.
 
        The different server options can be found on our wiki: https://infoshare.dtv.dk/twiki/bin/view/DADS/CIS
-       It should be noted, that the "imageServiceUrl" parameter always should point to the api like "http://staging.imageservice.cvt.dk/api"
+       It should be noted, that the "dadscis.imageServiceUrl" parameter always should point to the api like "http://staging.imageservice.cvt.dk/api"
 
-6. Save your changes to the web.xml file.
+5. Restart your Tomcat.
 
-7. Repack the .war file.
-
-       Make sure that the resulting file keeps the .war extension and that the archive have den same structure as the original .war-file.
-
-       |-- META-INF
-       |   `-- maven
-       |       `-- dk.dtu.dtic.gazo
-       |           `-- proxy
-       `-- WEB-INF
-           |-- classes
-           |   `-- dk
-           |       `-- dtu
-           |           `-- dtic
-           |               `-- gazo
-           `-- lib
-
-8. Copy the repacked .war-file into the webapps folder in your Tomcat.
-
-       While not required it may be most convenient for you to install the proxy as a root application in your Tomcat.
-
-9. Restart your Tomcat.
-
-10. Your proxy is now up and running.
+6. Your proxy is now up and running.
 
        You should now be able to reach your proxy on:
        http://dads.partners.own.server.edu (if you have installed the proxy as a root application)
