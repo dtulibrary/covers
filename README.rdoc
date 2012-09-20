@@ -31,17 +31,17 @@ If you choose to use our reference implementation your proxy should be up and ru
 
        Make sure that the resulting file keeps the .war extension and that the archive have den same structure as the original .war-file.
 
-  |-- META-INF
-  |   `-- maven
-  |       `-- dk.dtu.dtic.gazo
-  |           `-- proxy
-  `-- WEB-INF
-      |-- classes
-      |   `-- dk
-      |       `-- dtu
-      |           `-- dtic
-      |               `-- gazo
-      `-- lib
+       |-- META-INF
+       |   `-- maven
+       |       `-- dk.dtu.dtic.gazo
+       |           `-- proxy
+       `-- WEB-INF
+       |-- classes
+       |   `-- dk
+       |       `-- dtu
+       |           `-- dtic
+       |               `-- gazo
+       `-- lib
 
 8. Copy the repacked .war-file into the webapps folder in your Tomcat.
 
@@ -67,10 +67,16 @@ When you are issued an API key the follwing configurations are also set for you:
 * Default width
        The width of images returned to you through "simple requests".
 * On missing image
-        The http value returned if no image is available for the issn in question. In your initial set up the http value will be 200 (OK), meaning that if no image is available for a given ISSN, the service will deliver a fake image, with the title corresponding to the requested ISSN. At the moment though, no title will be supplied when an image is missing, and the fake image will by default be with title "No image".
-        The http value 200 (OK) can be changed to other values of your choice, if you want to handle the http value on your server side. An option could be 404 (not found).
+        The http value returned if no image is available for the issn in question.
+        In your initial set up the http value will be 200 (OK), meaning that if no image is available for a given ISSN, the service will deliver a fake image, with the title corresponding to the requested ISSN.
+        At the moment though, no title will be supplied when an image is missing, and the fake image will by default be with title "No image".
+        The http value 200 (OK) can be changed to other values of your choice, if you want to handle the http value on your server side.
+        An option could be 404 (not found).
 * On missing title
-        The http value returned if no image is available and no title can be found. In your initial set up the http value will be 200 (OK), meaning that the service will deliver a fake image with title "No image". Again, this can be changed to other http values of your choice if you want to handle the http value on your server side. An option could be 404 (not found).
+        The http value returned if no image is available and no title can be found.
+        In your initial set up the http value will be 200 (OK), meaning that the service will deliver a fake image with title "No image".
+        Again, this can be changed to other http values of your choice if you want to handle the http value on your server side.
+        An option could be 404 (not found).
         
 Each of the configurations above can be modified to fit your needs.
 
@@ -99,10 +105,12 @@ In addition to this, simple request will choose the default image height and wid
 Below are a couple of example requests to our demo proxy implementation. It should be noted that it may not be running, since each DADS Partner should use their own setup with their own API key. We will however start it for a short period of time, while you set up your own proxy, on your request.
 
         # Simple request
-        http://imageservicedemo.dtic.dk/09064710/native.png                   # id=09064710 , region=full , width=user_default , height=user_default , rotation=0 , format=png
+        http://imageservicedemo.dtic.dk/09064710/native.png
+        (id=09064710 , region=full , width=user_default , height=user_default , rotation=0 , format=png)
 
         # IIIF request
-        http://imageservicedemo.dtic.dk/09064710/full/180,240/0/native.png    # id=09064710 , region=full , width=180 , height=240 , rotation=0 , format=png
+        http://imageservicedemo.dtic.dk/09064710/full/180,240/0/native.png
+        (id=09064710 , region=full , width=180 , height=240 , rotation=0 , format=png)
 
         # Info requests:
         http://imageservicedemo.dtic.dk/09064710/info.xml
