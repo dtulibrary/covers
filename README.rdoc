@@ -23,7 +23,7 @@ If you choose to use our reference implementation your proxy should be up and ru
 5. Notice the "imageServiceUrl" parameter in the web.xml file. You can change this configuration to target the another stage in  our development of DADS CIS.
 
        The different server options can be found on our wiki: https://infoshare.dtv.dk/twiki/bin/view/DADS/CIS
-       It should be noted, that the "imageServiceUrl" parameter always should should point the api like "http://staging.imageservice.cvt.dk/api"
+       It should be noted, that the "imageServiceUrl" parameter always should point to the api like "http://staging.imageservice.cvt.dk/api"
 
 6. Save your changes to the web.xml file.
 
@@ -36,12 +36,12 @@ If you choose to use our reference implementation your proxy should be up and ru
        |       `-- dk.dtu.dtic.gazo
        |           `-- proxy
        `-- WEB-INF
-       |-- classes
-       |   `-- dk
-       |       `-- dtu
-       |           `-- dtic
-       |               `-- gazo
-       `-- lib
+           |-- classes
+           |   `-- dk
+           |       `-- dtu
+           |           `-- dtic
+           |               `-- gazo
+           `-- lib
 
 8. Copy the repacked .war-file into the webapps folder in your Tomcat.
 
@@ -92,7 +92,7 @@ This means that you can make request to DADS CIS with the following form:
 
 Where ID is an ISSN or ISBN number. REGION determines the region of the image you want ("full" means the complete image). SIZE determines the size of the returned image. ROTATION determines how much the returned image should be rotated (0 means no rotation). QUALITY should always be "native" for DADS CIS, because we only support the coloring scale present in our repository. FORMAT is the desired image format (for example png) and INFOFORMAT is either XML or JSON.
 
-As an addition to IIIF, DADS CIS offer simple requests, where parameters are dictated by the DADS partners configuration. Essencially, this provides a shortcut to the a request with the default configurations of the DADS Partner.
+As an addition to IIIF, DADS CIS offer simple requests, where parameters are dictated by the DADS partners configuration. Essencially, this provides a shortcut to the a request with the default configurations of the DADS partner.
 
 A simple request will have the following form:
 
@@ -100,9 +100,9 @@ A simple request will have the following form:
 
 Where ID is an ISSN or ISBN number. QUALITY should always be "native" for DADS CIS, because we only support the coloring scale present in our repository. FORMAT is the desired image format (for example png).
 
-In addition to this, simple request will choose the default image height and width from the DADS Partner configuration and choose NOT to rotate or crop the image.
+In addition to this, simple request will choose the default image height and width from the DADS partner configuration and choose NOT to rotate or crop the image.
 
-Below are a couple of example requests to our demo proxy implementation. It should be noted that it may not be running, since each DADS Partner should use their own setup with their own API key. We will however start it for a short period of time, while you set up your own proxy, on your request.
+Below are a couple of example requests to our demo proxy implementation. It should be noted that it may not be running, since each DADS partner should use their own setup with their own API key. We will however start it for a short period of time, while you set up your own proxy, on your request.
 
         # Simple request
         http://imageservicedemo.dtic.dk/09064710/native.png
