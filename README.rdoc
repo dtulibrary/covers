@@ -10,7 +10,7 @@ In order to use DADS CIS you are required to set up a proxy which hides your API
 
 You can either create your own or use the reference implementation we provide (for Java; Tomcat). 
 
-If you choose to use our reference implementation your proxy should be up and running by following these steps:
+If you choose our reference implementation your proxy please follow these steps:
 
 1. Download the .war file containing the latest version of our proxy from https://infoshare.dtv.dk/twiki/bin/view/DADS/CIS
 
@@ -30,10 +30,10 @@ If you choose to use our reference implementation your proxy should be up and ru
        It should look something like this:
        <Environment name="dadscis.apiKey" value="yourApiKey" type="java.lang.String" override="false"/>
 
-7. Notice the "dadscis.imageServiceUrl" parameter in the proxy.xml file. You can change this configuration to target the another stage in  our development of DADS CIS.
+7. Notice the "dadscis.imageServiceUrl" parameter in the proxy.xml file. This determines which of our servers your proxy is accessing.
 
        The different server options can be found on our wiki: https://infoshare.dtv.dk/twiki/bin/view/DADS/CIS
-       It should be noted, that the "dadscis.imageServiceUrl" parameter always should point to the api like "http://staging.imageservice.cvt.dk/api"
+       It should be noted, that the "dadscis.imageServiceUrl" parameter always should point to the api, like "http://staging.imageservice.cvt.dk/api"
 
 8. Restart your Tomcat.
 
@@ -48,7 +48,7 @@ If you choose to use our reference implementation your proxy should be up and ru
 
 == DADS partner configuration
 
-When you are issued an API key the follwing configurations are also set for you:
+When you are issued an API key the following configurations are also set for you:
 
 * Default height
        The height of images returned to you through "simple requests".
@@ -80,7 +80,7 @@ This means that you can make request to DADS CIS with the following form:
 
 Where ID is an ISSN or ISBN number. REGION determines the region of the image you want ("full" means the complete image). SIZE determines the size of the returned image. ROTATION determines how much the returned image should be rotated (0 means no rotation). QUALITY should always be "native" for DADS CIS, because we only support the coloring scale present in our repository. FORMAT is the desired image format (for example png) and INFOFORMAT is either XML or JSON.
 
-As an addition to IIIF, DADS CIS offer simple requests, where parameters are dictated by the DADS partners configuration. Essencially, this provides a shortcut to the a request with the default configurations of the DADS partner.
+As an addition to IIIF, DADS CIS offer simple requests, where parameters are dictated by the DADS partners configuration. Essentially, this provides a shortcut to the request with the default configurations.
 
 A simple request will have the following form:
 
@@ -88,9 +88,9 @@ A simple request will have the following form:
 
 Where ID is an ISSN or ISBN number. QUALITY should always be "native" for DADS CIS, because we only support the coloring scale present in our repository. FORMAT is the desired image format (for example png).
 
-In addition to this, simple request will choose the default image height and width from the DADS partner configuration and choose NOT to rotate or crop the image.
+In addition to this, a simple request will choose the default image height and width from the DADS partner configuration and NOT to rotate or crop the image.
 
-Below are a couple of example requests to our demo proxy implementation. It should be noted that it may not be running, since each DADS partner should use their own setup with their own API key. We will however start it for a short period of time, while you set up your own proxy, on your request.
+Below are a couple of example requests to our demo proxy implementation. It should be noted that it may not be running, since each DADS partner should use their own setup with their own API key. On request we will start it for a short period of time, while you set up your own proxy.
 
         # Simple request
         http://imageservicedemo.dtic.dk/09064710/native.png
