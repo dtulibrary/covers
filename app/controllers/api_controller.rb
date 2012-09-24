@@ -21,7 +21,7 @@ class ApiController < ApplicationController
   # Info variables
   attr_accessor :info_width,:info_height,:formats,:qualities
   # Regular expression patterns (only the ones which are used in more than one location have been made into constants)
-  ID_PATTERN = /^(\d{8}|\d{7}x|x\d{7})$|^(\d{13}|\d{12}x|x\d{12})$/i
+  ID_PATTERN = /\S/ # Should not test on semantics of the ID but rather just treat it as an ID and test whether it has an image for it or not /^(\d{8}|\d{7}x|x\d{7})$|^(\d{13}|\d{12}x|x\d{12})$/i
   ISSN_PATTERN = /^(\d{8}|\d{7}x|x\d{7})$/i
   
   def info
