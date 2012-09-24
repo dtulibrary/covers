@@ -210,7 +210,7 @@ module ApiHelper
   ### Repository requests ###
   def fetch_image
     timer = Time.now.to_f
-    uri = URI.parse(API_CONFIG['imagerepository']['connection_protocol']+API_CONFIG['imagerepository']['host']+@service_location+@id)
+    uri = URI.parse(API_CONFIG['imagerepository']['connection_protocol']+API_CONFIG['imagerepository']['host']+@service_location+@id.downcase)
     response = Net::HTTP.get_response(uri)
     @response_time_image = Time.now.to_f - timer
     if response.code.to_i == 200
