@@ -7,7 +7,6 @@ gem 'rails', '3.2.6'
 
 gem 'sqlite3'
 gem 'rspec-rails'
-
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -24,6 +23,7 @@ gem 'jquery-rails'
 
 group :test do
   gem 'capybara', '1.1.2'
+  gem 'webmock'
 end
 
 group :development do

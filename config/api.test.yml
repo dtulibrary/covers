@@ -1,0 +1,13 @@
+imagerepository :
+  url                      : http://image.example.com
+  service_location_journal : /somejournal/
+  service_location_book    : /someboook/
+solr   :
+  url                     : http://solr.example.com
+  request_handler_journal : somejournalrh
+  request_handler_book    : somebookrh
+iiif_compliance :
+  header                  : "<http://library.stanford.edu/iiif/image-api/compliance.html#level1>;rel=\"profile\""
+authentication :
+  username                : bla
+  password                : blabla
