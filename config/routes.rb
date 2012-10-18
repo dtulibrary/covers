@@ -19,6 +19,8 @@ ImageDeliveryService::Application.routes.draw do
   match 'user/edit' => 'user#edit'
   match 'user/update' => 'user#update'
   match 'user/delete' => 'user#delete'
+  
+  match "*path" => 'api#render_404'
 
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'
