@@ -192,6 +192,8 @@ module ApiHelper
     Total response time 
 =end
     info = Array.new
+    info << "api_key="+(@api_key ? @api_key : "unauthorized request")
+    info << "request_ip="+(@request_ip ? @request_ip : "unknown ip")
     info << "cache_id="+(@cache_id ? @cache_id : "bad request")
     info << "cache_hit="+(@cache_hit ? "yes" : "no") # @cache_hit => true || false
     info << "image_hit="+(@image_hit ? "yes" : "no") # @image_hit => true || false    

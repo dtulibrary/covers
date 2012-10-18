@@ -14,7 +14,7 @@ class ApiController < ApplicationController
   # Repository path variables
   attr_accessor :service_location
   # Other variables
-  attr_accessor :transformed_image,:cache_id,:mime_type,:file_extension,:user
+  attr_accessor :transformed_image,:cache_id,:mime_type,:file_extension,:user,:request_ip
   # Log variables
   attr_accessor :start_time,:total_time,:cache_hit,:image_hit,:title_hit,:response_time_image
   attr_accessor :response_time_title,:image_proc_time,:image_synth_time
@@ -25,6 +25,8 @@ class ApiController < ApplicationController
   ISSN_PATTERN = /^(\d{8}|\d{7}x|x\d{7})$/i
   
   def info
+    ### Get request ip ###
+    @request_ip = request.remote_ip
     ### Set compliance level header ###
     response.headers["X-Link"]=API_CONFIG['iiif_compliance']['header']
     ### Set incoming parameters as class variables ###
@@ -62,11 +64,15 @@ class ApiController < ApplicationController
   end
   
   def wiki
+    ### Get request ip ###
+    @request_ip = request.remote_ip
     ### Set compliance level header ###
     response.headers["X-Link"]=API_CONFIG['iiif_compliance']['header']
   end
   
   def index
+    ### Get request ip ###
+    @request_ip = request.remote_ip
     ### Set compliance level header ###
     response.headers["X-Link"]=API_CONFIG['iiif_compliance']['header']
     ### Set incoming parameters as class variables ###
