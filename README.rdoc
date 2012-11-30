@@ -28,16 +28,29 @@ If you choose our reference implementation your proxy please follow these steps:
 6. Insert your api key where it says "INSERT API KEY".
 
        It should look something like this:
-       <Environment name="dadscis.apiKey" value="yourApiKey" type="java.lang.String" override="false"/>
+       <Environment name="dadscis.image.apiKey" value="yourApiKey" type="java.lang.String" override="false"/>
 
-7. Notice the "dadscis.imageServiceUrl" parameter in the proxy.xml file. This determines which of our servers your proxy is accessing.
+7. Notice the "dadscis.image.serviceUrl" parameter in the proxy.xml file. This determines which of our servers your proxy is accessing.
 
        The different server options can be found on our wiki: https://infoshare.dtv.dk/twiki/bin/view/DADS/CIS
-       It should be noted, that the "dadscis.imageServiceUrl" parameter always should point to the api, like "http://staging.imageservice.cvt.dk/api"
+       It should be noted, that the "dadscis.image.serviceUrl" parameter always should point to the api, like "http://staging.imageservice.cvt.dk/api"
 
-8. Restart your Tomcat.
+8. Notice the "dadscis.image.useNoImage" parameter in the proxy.xml file. This deterines if the proxy should replace 404 responses with an image from the file system.
 
-9. Your proxy is now up and running.
+       To enable the use of a custom no image, the value of "dadscis.image.useNoImage" should be "yes". The use of any other value will disable the functionality.
+
+9. If use of custom no images is enabled, two additional parameters should be configured. These parameters are called "dadscis.image.noImage" and "dadscis.image.noImageContentType". The "dadscis.image.noImage" parameter determines location of the image file that should replace 404 responses. The "dadscis.image.noImageContentType" should be set to the content type that corresponds to the file type of the image specified in "dadscis.image.noImage".
+
+       It should look something like this:
+       <Environment name="dadscis.image.noImage" value="path.to.image.file/filename" type="java.lang.String" override="false"/>
+       <Environment name="dadscis.image.noImageContentType" value="image.contenttype" type="java.lang.String" override="false"/>
+       And here is an example for a PNG image:
+       <Environment name="dadscis.image.noImage" value="path.to.image.file/image.png" type="java.lang.String" override="false"/>
+       <Environment name="dadscis.image.noImageContentType" value="image/png" type="java.lang.String" override="false"/>
+
+10. Restart your Tomcat.
+
+11. Your proxy is now up and running.
 
        You should now be able to reach your proxy on:
        http://dads.partners.own.server.edu (if you have installed the proxy as a root application)
