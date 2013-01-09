@@ -10,7 +10,7 @@ ImageDeliveryService::Application.routes.draw do
   get 'api/:api_key/:id/:region/:size/:rotation/:file' => 'api#index',:constraints=>{:rotation => /[^\/]+/},:as=>:api
   get 'api/:api_key/:id/info' => 'api#info',:constraints => {:format => /(xml|json)/}, :as => :info
   get 'api/:api_key/:id/:file' => 'api#index', :as => :api
-  
+
   match 'user' => 'user#index', :as => :user
   match 'user/cache_reset' => 'user#cache_reset'
   match 'user/new' => 'user#new'
@@ -19,7 +19,7 @@ ImageDeliveryService::Application.routes.draw do
   match 'user/edit' => 'user#edit'
   match 'user/update' => 'user#update'
   match 'user/delete' => 'user#delete'
-  
+
   match "*path" => 'api#render_404'
 
   # Sample of regular route:
