@@ -125,14 +125,9 @@ module ApiHelper
   
   ### Fake image ###
   def get_title_from_solr
-    response = false #TODO: this is for test purposes only! should be deleted later!
-=begin 
     solr = RSolr.connect :url => API_CONFIG['solr']['url']
     request_handler = ( @id.length == 8 ? API_CONFIG['solr']['request_handler_journal'] : API_CONFIG['solr']['request_handler_book'])
-    response = solr.get request_handler, :params => { # select?q=....
-       :q=>@id, # Query - should point to post with issn/isbn
-    }
-=end
+    response = solr.get request_handler, :params => { :q => @id }
     return response
   end
   
