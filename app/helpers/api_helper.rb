@@ -127,28 +127,13 @@ module ApiHelper
   def get_title_from_solr
     solr = RSolr.connect :url => API_CONFIG['solr']['url']
     request_handler = ( @id.length == 8 ? API_CONFIG['solr']['request_handler_journal'] : API_CONFIG['solr']['request_handler_book'])
-    response = solr.get request_handler, :params => { :q => @id }
-    return response
+    solr.get request_handler, :params => { :q => @id }
   end
   
-  def parse_solr_response(response)   
-    text = 'No image'
-    if response
-      if(not(response["response"] and response["response"]["docs"]))
-        # Check user preffered action on missing title
-        return text if not @user.on_missing_title == 200
-      elsif(not(response["response"]["docs"].empty? or response["response"]["docs"][0].keys.empty? or response["response"]["docs"][0]["title"].empty?))
-        text = response["response"]["docs"][0]["title"][0]
-        @title_hit = true
-        return text
-      else
-        # Check user preffered action on missing title
-        return text# if not @user.on_missing_title == 200
-      end
-    else
-      # Check user preffered action on missing title
-      return text# if not @user.on_missing_title == 200
-    end
+  def parse_solr_response(response)
+    response.try(:fetch, 'response').try(:fetch, 'docs').try(:first).try(:fetch, 'title').try(:first).tap {|title|
+      @title_hit = true if title
+    }
   end
   
   def calculate_fitting_text_properties(width,height)
