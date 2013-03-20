@@ -131,7 +131,7 @@ module ApiHelper
   end
   
   def parse_solr_response(response)
-    response.try(:fetch, 'response').try(:fetch, 'docs').try(:first).try(:fetch, 'title').try(:first).tap {|title|
+    response.try(:fetch, 'response', nil).try(:fetch, 'docs', nil).try(:first).try(:fetch, 'title', nil).try(:first).tap {|title|
       @title_hit = true if title
     }
   end
