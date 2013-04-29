@@ -1,6 +1,5 @@
 ImageDeliveryService::Application.routes.draw do
   get "user/index"
-  #get "api/index"
   get "/" => "api#wiki"
   get "api" => "api#wiki"
   get "api/:api_key" => "api#wiki"
@@ -20,7 +19,7 @@ ImageDeliveryService::Application.routes.draw do
   match 'user/update' => 'user#update'
   match 'user/delete' => 'user#delete'
 
-  match "*path" => 'api#render_404'
+  match "*path" => 'api#render_error'#render_not_found' # Render 404
 
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'

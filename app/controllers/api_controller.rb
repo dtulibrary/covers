@@ -9,6 +9,7 @@ class ApiController < ApplicationController
   # Includes
   include RMagickTextUtil
   include ApiHelper
+  
   # Params
   attr_accessor :api_key,:id,:region,:size,:rotation,:file
   # Repository path variables
@@ -35,27 +36,21 @@ class ApiController < ApplicationController
     @formats = ["jpg", "png"]
     @qualities = ["native"]
     is_bad_request = false
-    @user = User.find(:first,:conditions=>{:api_key=>@api_key})#:first, :conditions=>{:api_key => @api_key})
-    render_401 and return if not @user
-    is_bad_request = true if not @id =~ ID_PATTERN
-    if is_bad_request
-      render_400(false) and return
-    end
+    @user = User.find(:first,:conditions=>{:api_key=>@api_key}) || unauthorized
+    bad_request if not @id =~ ID_PATTERN
+    
     ### Set repository path variables ###
     @service_location = (@id =~ ISSN_PATTERN ? API_CONFIG['imagerepository']['service_location_journal'] : API_CONFIG['imagerepository']['service_location_book'])
     ### Fetch Image ###
-    was_found,image_data = fetch_image
-    @image_hit = was_found
-    if was_found
-      ### Transform Image ###
-      timer = Time.now.to_f
-      # Load image
-      @transformed_image = Magick::Image::from_blob(image_data).first
-      @info_width = @transformed_image.columns
-      @info_height = @transformed_image.rows
-    else
-      render_404(false) and return
-    end
+    @image_hit,image_data = fetch_image
+    not_found if not @image_hit
+    
+    ### Transform Image ###
+    timer = Time.now.to_f
+    # Load image
+    @transformed_image = Magick::Image::from_blob(image_data).first
+    @info_width = @transformed_image.columns
+    @info_height = @transformed_image.rows
 
     respond_to do |format|
       format.json
@@ -82,21 +77,23 @@ class ApiController < ApplicationController
     @size = params[:size]
     @rotation = params[:rotation]
     @start_time = Time.now.to_f #TODO: maybe this should be placed after verification ?
-    render_400 and return if not params['format']
-    render_415 and return if not params['format'] =~ /^(png|jpg)$/i
-    render_501 and return if params[:file] =~ /^(color|gray|bitonal)$/i
+    bad_request if not params['format']
+    unsupported_media_type if not params['format'] =~ /^(png|jpg)$/i
+    not_implemented if params[:file] =~ /^(color|gray|bitonal)$/i
     @file = (params[:file]+'.'+params['format']).downcase
     ### Verify parameters ###
     is_bad_request = false
-    @user = User.find(:first,:conditions=>{:api_key=>@api_key})
-    render_401 and return if not @user 
+    @user = User.find(:first,:conditions=>{:api_key=>@api_key}) || unauthorized
+     
     if @user
       @region = (@region ? @region : "full") 
       @size = (@size ? @size : "#{@user.default_width},#{@user.default_height}")
       @rotation = (@rotation ? @rotation : "0")
     end
     
-    render_501 and return if @rotation =~ /^\d+\.\d+$/
+    #render_501 and return if @rotation =~ /^\d+\.\d+$/
+    not_implemented if @rotation =~ /^\d+\.\d+$/
+    
     @id.gsub!(/-/,"")
     is_bad_request = true if not @id =~ ID_PATTERN
     is_bad_request = true if not @region =~ /^full$|^\d+,\d+,\d+,\d+$|^pct:\d+,\d+,\d+,\d+$/
@@ -111,26 +108,22 @@ class ApiController < ApplicationController
     @mime_type = "image/jpeg" if @file_extension == 'jpg'
     @file_extension = @file_extension.downcase
     ### Fetch Header or Handle error ###
-    if is_bad_request
-      render_400 and return
+    bad_request if is_bad_request
+    @cache_id = @id.to_s+"||"+@region.to_s+"||"+@size.to_s+"||"+@rotation.to_s+"||"+@file.to_s
+    #Rails.cache.clear
+    cache_item = Rails.cache.read @cache_id
+    if cache_item
+      @cache_hit = true
+      @image_hit = (cache_item['is_faked'] ? false : true)
+      # Send transformed image as response
+      Rails.cache.write @cache_id, cache_item, :expires_in => (ImageDeliveryService::Application.config.cache_duration).minute
+      render_error(@user.on_missing_image) if cache_item['is_faked'] == true and not @user.on_missing_image == 200
+      render_error(@user.on_missing_title) if cache_item['missing_title'] == true and not @user.on_missing_title == 200
+      # Perform logging.
+      write_to_log
+      send_data(cache_item['blob'] , :filename => cache_item['filename'], :type=>cache_item['type']) and return
     else
-      @cache_id = @id.to_s+"||"+@region.to_s+"||"+@size.to_s+"||"+@rotation.to_s+"||"+@file.to_s
-      #Rails.cache.clear
-      #cache_item = false
-      cache_item = Rails.cache.read @cache_id
-      if cache_item
-        @cache_hit = true
-        @image_hit = (cache_item['is_faked'] ? false : true)
-        # Send transformed image as response
-        Rails.cache.write @cache_id, cache_item, :expires_in => (ImageDeliveryService::Application.config.cache_duration).minute
-        render_error(@user.on_missing_image) and return if cache_item['is_faked'] == true and not @user.on_missing_image == 200
-        render_error(@user.on_missing_title) and return if cache_item['missing_title'] == true and not @user.on_missing_title == 200
-        # Perform logging.
-        write_to_log
-        send_data(cache_item['blob'] , :filename => cache_item['filename'], :type=>cache_item['type']) and return
-      else
-        @cache_hit = false
-      end
+      @cache_hit = false
     end
     ### Fetch Image ###
     was_found,image_data = fetch_image
@@ -142,7 +135,7 @@ class ApiController < ApplicationController
       @transformed_image = Magick::Image::from_blob(image_data).first
       
       # Crop image
-      render_400 and return if not crop_image
+      bad_request if not crop_image
       
       # Scale image
       scale_image
@@ -174,11 +167,11 @@ class ApiController < ApplicationController
       ### Image not found in repository. Fake image! ###
       
       # Check user preffered action on missing image
-      render_error(@user.on_missing_image) and return if not @user.on_missing_image == 200
+      render_error(@user.on_missing_image) if not @user.on_missing_image == 200
       
       # Set defaul image size.
       width,height = get_synth_size
-      render_400 and return if not width or not height
+      bad_request if not width or not height
       
       timer = Time.now.to_f
       # Get item title from solr.
@@ -187,7 +180,7 @@ class ApiController < ApplicationController
       @title_hit = false
       @response_time_title = Time.now.to_f - timer
       text = parse_solr_response(solr_response) # This will change @title_hit to true if a title was found in the solr_response.
-      render_error(@user.on_missing_title) and return if @user.on_missing_title != 200 and not(@title_hit)
+      render_error(@user.on_missing_title) if @user.on_missing_title != 200 and not(@title_hit)
       
       # Create background
       canvas = Magick::ImageList.new
@@ -244,48 +237,4 @@ class ApiController < ApplicationController
     end
   end
   
-  ### Error Messages ###
-  private
-  def render_error(code)
-    if code == 400
-      render_400
-    elsif code == 404
-      render_404
-    else
-      render_404 # Render 404 in case of unknown error code.
-    end
-  end
-  
-  private
-  def render_400(perform_log=true)
-    # Perform logging.
-    write_to_log if perform_log
-    # Render
-    render :file => "#{Rails.root}/public/400", :status => :bad_request, :formats => :html
-  end
-  
-  private
-  def render_401
-    #TODO: should we log something on unauthorized attempts ???
-    render :file => "#{Rails.root}/public/401", :status => :unauthorized, :formats => :html
-  end
-  
-  private
-  def render_404(perform_log=true)
-    # Perform logging.
-    write_to_log if perform_log
-    # Render
-    render :file => "#{Rails.root}/public/404", :status => :not_found, :formats => :html
-  end
-  
-  private
-  def render_415
-    render :file => "#{Rails.root}/public/415", :status => :unsupported_media_type, :formats => :html
-  end
-  
-  private
-  def render_501
-    #TODO: should we log something on requests for features that haven't been implemented ?
-    render :file => "#{Rails.root}/public/501", :status => :not_implemented, :formats => :html
-  end
 end
