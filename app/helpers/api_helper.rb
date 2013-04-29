@@ -158,6 +158,7 @@ module ApiHelper
   def write_to_log
     @total_time = Time.now.to_f - @start_time
     CACHE_LOG.info log_msg
+    logger.info( log_msg )
   end
   
   def log_msg

@@ -26,3 +26,5 @@
 # Ignore local database config
 /config/database.local.yml
 /config/api.local.yml
+
+/vagrant/.vagrant
