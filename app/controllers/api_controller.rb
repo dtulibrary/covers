@@ -84,14 +84,10 @@ class ApiController < ApplicationController
     ### Verify parameters ###
     is_bad_request = false
     @user = User.find(:first,:conditions=>{:api_key=>@api_key}) || unauthorized
-     
-    if @user
-      @region = (@region ? @region : "full") 
-      @size = (@size ? @size : "#{@user.default_width},#{@user.default_height}")
-      @rotation = (@rotation ? @rotation : "0")
-    end
+    @region = (@region ? @region : "full") 
+    @size = (@size ? @size : "#{@user.default_width},#{@user.default_height}")
+    @rotation = (@rotation ? @rotation : "0")
     
-    #render_501 and return if @rotation =~ /^\d+\.\d+$/
     not_implemented if @rotation =~ /^\d+\.\d+$/
     
     @id.gsub!(/-/,"")
@@ -126,9 +122,8 @@ class ApiController < ApplicationController
       @cache_hit = false
     end
     ### Fetch Image ###
-    was_found,image_data = fetch_image
-    @image_hit = was_found
-    if was_found
+    @image_hit,image_data = fetch_image
+    if @image_hit
       ### Transform Image ###
       timer = Time.now.to_f
       # Load image
