@@ -10,6 +10,8 @@ class ApiController < ApplicationController
   include RMagickTextUtil
   include ApiHelper
   
+  before_filter :set_iiif_complicance, :only => [:info, :index, :wiki]
+  
   # Params
   attr_accessor :api_key,:id,:region,:size,:rotation,:file
   # Repository path variables
@@ -28,9 +30,7 @@ class ApiController < ApplicationController
   def info
     ### Get request ip ###
     @request_ip = request.remote_ip
-    ### Set compliance level header ###
-    response.headers["X-Link"]=API_CONFIG['iiif_compliance']['header']
-    ### Set incoming parameters as class variables ###
+    # ### Set compliance level header ###
     @api_key = params[:api_key]
     @id = params[:id]
     @formats = ["jpg", "png"]
@@ -40,7 +40,7 @@ class ApiController < ApplicationController
     bad_request if not @id =~ ID_PATTERN
     
     ### Set repository path variables ###
-    @service_location = (@id =~ ISSN_PATTERN ? API_CONFIG['imagerepository']['service_location_journal'] : API_CONFIG['imagerepository']['service_location_book'])
+    @service_location = (@id =~ ISSN_PATTERN ? Rails.application.config.imagerepository[:service_location_journal] : Rails.application.config.imagerepository[:service_location_book])
     ### Fetch Image ###
     @image_hit,image_data = fetch_image
     not_found if not @image_hit
@@ -61,15 +61,11 @@ class ApiController < ApplicationController
   def wiki
     ### Get request ip ###
     @request_ip = request.remote_ip
-    ### Set compliance level header ###
-    response.headers["X-Link"]=API_CONFIG['iiif_compliance']['header']
   end
   
   def index
     ### Get request ip ###
     @request_ip = request.remote_ip
-    ### Set compliance level header ###
-    response.headers["X-Link"]=API_CONFIG['iiif_compliance']['header']
     ### Set incoming parameters as class variables ###
     @api_key = params[:api_key]
     @id = params[:id]
@@ -97,7 +93,7 @@ class ApiController < ApplicationController
     is_bad_request = true if not @rotation =~ /^\d+$/
     is_bad_request = true if not @file =~ /^native\.(png|jpg)$/
     ### Set repository path variables ###
-    @service_location = (@id =~ ISSN_PATTERN ? API_CONFIG['imagerepository']['service_location_journal'] : API_CONFIG['imagerepository']['service_location_book'])
+    @service_location = (@id =~ ISSN_PATTERN ? Rails.application.config.imagerepository[:service_location_journal] : Rails.application.config.imagerepository[:service_location_book])
     ### Initialize other variables ###
     @file_extension = @file.split('.')[1]
     @mime_type = "image/#{@file_extension}"
@@ -232,4 +228,9 @@ class ApiController < ApplicationController
     end
   end
   
+  protected
+  def set_iiif_complicance
+    ### Set compliance level header ###
+    response.headers["X-Link"]=Rails.application.config.iiif_compliance
+  end
 end

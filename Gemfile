@@ -8,6 +8,9 @@ gem 'rmagick', :require => false
 gem 'rsolr'
 gem 'memcache-client'
 gem 'pg'
+gem 'omniauth'
+gem 'omniauth-cas'
+gem 'cancan'
 gem "gelf"
 gem "lograge"
 gem 'jquery-rails'

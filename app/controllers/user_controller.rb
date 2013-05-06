@@ -1,8 +1,9 @@
 require 'securerandom'
 
 class UserController < ApplicationController
-  http_basic_authenticate_with :name => (API_CONFIG['authentication'] ? API_CONFIG['authentication']['username'] : ''), :password => (API_CONFIG['authentication'] ? API_CONFIG['authentication']['password'] : '')
-  before_filter :find_user, :only => [:show, :edit, :delete]
+  #http_basic_authenticate_with :name => (API_CONFIG['authentication'] ? API_CONFIG['authentication']['username'] : ''), :password => (API_CONFIG['authentication'] ? API_CONFIG['authentication']['password'] : '')
+  before_filter :authenticate
+  before_filter :find_user, :only => [:show, :edit, :delete]  
   
   attr_accessor :users, :user
   

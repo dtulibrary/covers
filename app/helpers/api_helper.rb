@@ -125,8 +125,8 @@ module ApiHelper
   
   ### Fake image ###
   def get_title_from_solr
-    solr = RSolr.connect :url => API_CONFIG['solr']['url']
-    request_handler = ( @id.length == 8 ? API_CONFIG['solr']['request_handler_journal'] : API_CONFIG['solr']['request_handler_book'])
+    solr = RSolr.connect :url => Rails.application.config.solr[:url]
+    request_handler = ( @id.length == 8 ? Rails.application.config.solr[:request_handler_journal] : Rails.application.config.solr[:request_handler_book])
     solr.get request_handler, :params => { :q => @id }
   end
   
@@ -192,8 +192,10 @@ module ApiHelper
   end
   ### Repository requests ###
   def fetch_image
-    timer = Time.now.to_f
-    uri = URI.parse(API_CONFIG['imagerepository']['url']+@service_location+@id.downcase)
+    timer = Time.now.to_f    
+    puts "Attempted to fetch URL = #{Rails.application.config.imagerepository[:url]+@service_location+@id.downcase}"
+    
+    uri = URI.parse(Rails.application.config.imagerepository[:url]+@service_location+@id.downcase)
     response = Net::HTTP.get_response(uri)
     @response_time_image = Time.now.to_f - timer
     if response.code.to_i == 200

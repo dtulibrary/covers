@@ -1,5 +1,11 @@
 ImageDeliveryService::Application.routes.draw do
   get "user/index"
+  
+  match '/login',                   :to => 'users/sessions#new',       :as => 'new_user_session'
+  match '/auth/:provider/callback', :to => 'users/sessions#create',    :as => 'create_user_session'
+  match '/auth',                    :to => 'auth_provider#index',      :as => 'select_auth_provider', :via => :get
+  match '/auth',                    :to => 'auth_provider#create',     :as => 'set_auth_provider',    :via => :post
+  
   get "/" => "api#wiki"
   get "api" => "api#wiki"
   get "api/:api_key" => "api#wiki"
