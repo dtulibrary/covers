@@ -192,9 +192,7 @@ module ApiHelper
   end
   ### Repository requests ###
   def fetch_image
-    timer = Time.now.to_f    
-    puts "Attempted to fetch URL = #{Rails.application.config.imagerepository[:url]+@service_location+@id.downcase}"
-    
+    timer = Time.now.to_f
     uri = URI.parse(Rails.application.config.imagerepository[:url]+@service_location+@id.downcase)
     response = Net::HTTP.get_response(uri)
     @response_time_image = Time.now.to_f - timer
