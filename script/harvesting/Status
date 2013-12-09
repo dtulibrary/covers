@@ -1,0 +1,15 @@
+Untested:
+
+brill (not finished)
+openlibrary
+librarything - mærkelig. Burde virke, gør det ikke.
+
+tested:
+aip (works, but can be improved to support more journal web sites)
+amazon
+chelsea
+elsevier
+gyldendal
+rsc (works, but is missing parsing of excel sheet)
+safari
+saxo
