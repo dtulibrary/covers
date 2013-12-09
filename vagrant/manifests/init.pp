@@ -5,7 +5,7 @@ class {'apache2':
 }
 
 class {'gazo': 
-  rails_env  => 'staging',
+  rails_env  => 'unstable',
   conf_set   => 'vagrant',
   vhost_name => 'gazo.vagrant.vm',
 }

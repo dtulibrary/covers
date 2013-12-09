@@ -1,6 +1,6 @@
 require 'bundler/capistrano'
 
-set :rails_env, ENV['RAILS_ENV'] || 'staging'
+set :rails_env, ENV['RAILS_ENV'] || 'unstable'
 set :application, ENV['HOST'] || 'gazo.vagrant.vm'
 set :primoproxy_config, ENV['GAZO_CONFIG'] || "#{rails_env}"
 
@@ -38,7 +38,7 @@ end
 
 # tasks
 
-before "deploy:migrate", "config:symlink"
+before "deploy:assets:precompile", "config:symlink"
 after "deploy:update", "deploy:cleanup"
 
 namespace :config do
