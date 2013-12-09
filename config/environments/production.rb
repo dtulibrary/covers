@@ -71,3 +71,7 @@ ImageDeliveryService::Application.configure do
   # Set (custom) application specific configurations
   config.cache_duration = 60*24*7 # (in minutes) (one week = 60*24*7)
 end
+
+if File.exists? File.dirname(__FILE__) + '/../application.local.rb'
+  require File.dirname(__FILE__) + '/../application.local.rb'
+end

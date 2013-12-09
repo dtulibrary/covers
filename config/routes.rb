@@ -1,6 +1,11 @@
 ImageDeliveryService::Application.routes.draw do
   get "user/index"
-  #get "api/index"
+  
+  match '/login',                   :to => 'users/sessions#new',       :as => 'new_user_session'
+  match '/auth/:provider/callback', :to => 'users/sessions#create',    :as => 'create_user_session'
+  match '/auth',                    :to => 'auth_provider#index',      :as => 'select_auth_provider', :via => :get
+  match '/auth',                    :to => 'auth_provider#create',     :as => 'set_auth_provider',    :via => :post
+  
   get "/" => "api#wiki"
   get "api" => "api#wiki"
   get "api/:api_key" => "api#wiki"
@@ -20,7 +25,7 @@ ImageDeliveryService::Application.routes.draw do
   match 'user/update' => 'user#update'
   match 'user/delete' => 'user#delete'
 
-  match "*path" => 'api#render_404'
+  match "*path" => 'api#render_error'#render_not_found' # Render 404
 
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'

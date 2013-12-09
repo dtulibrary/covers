@@ -4,7 +4,7 @@ require 'spec_helper'
 describe "Apis" do
   fixtures :users
   API_KEY_INVALID="asndaspodkjahsda"
-  IMG_JOURNAL = "#{API_CONFIG['imagerepository']['url']}#{API_CONFIG['imagerepository']['service_location_journal']}"
+  IMG_JOURNAL = "#{Rails.application.config.imagerepository[:url]}#{Rails.application.config.imagerepository[:service_location_journal]}"
   
   issn = "09064710"
   image_location = "app/assets/images"
@@ -16,7 +16,7 @@ describe "Apis" do
         with(:headers => {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}).
         to_return(:status => 200, :body => "#{image_blob}", :headers => { })
       get("api/#{users(:testuser).api_key}/#{issn}/info.xml")
-      response.header['X-Link'].should include API_CONFIG['iiif_compliance']['header']
+      response.header['X-Link'].should include Rails.application.config.iiif_compliance
       stub.should have_been_requested
       WebMock.reset!
     end
@@ -42,7 +42,7 @@ describe "Apis" do
         with(:headers => {'Accept'=>'*/*', 'User-Agent'=>'Ruby'}).
         to_return(:status => 200, :body => "#{image_blob}", :headers => { })
       get("api/#{users(:testuser).api_key}/#{issn}/native.png")
-      response.header['X-Link'].should include API_CONFIG['iiif_compliance']['header']
+      response.header['X-Link'].should include Rails.application.config.iiif_compliance
       response.header['Content-Type'].should include 'image/png'
     end
   end

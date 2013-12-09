@@ -1,7 +1,9 @@
 require 'securerandom'
 
 class UserController < ApplicationController
-  http_basic_authenticate_with :name => (API_CONFIG['authentication'] ? API_CONFIG['authentication']['username'] : ''), :password => (API_CONFIG['authentication'] ? API_CONFIG['authentication']['password'] : '')
+  #http_basic_authenticate_with :name => (API_CONFIG['authentication'] ? API_CONFIG['authentication']['username'] : ''), :password => (API_CONFIG['authentication'] ? API_CONFIG['authentication']['password'] : '')
+  before_filter :authenticate
+  before_filter :find_user, :only => [:show, :edit, :delete]  
   
   attr_accessor :users, :user
   
@@ -15,14 +17,14 @@ class UserController < ApplicationController
   end
   
   def show
-    @user = User.find(params[:id])#:first,:conditions=>{:api_key=>params[:id]})
+    # @user = User.find(params[:id])#:first,:conditions=>{:api_key=>params[:id]})
   end
   
   def new
   end
   
   def edit
-    @user = User.find(params[:id])
+    # @user = User.find(params[:id])
   end
   
   def update
@@ -63,9 +65,14 @@ class UserController < ApplicationController
   end
   
   def delete
-    @user = User.find(params[:id])
+    # @user = User.find(params[:id])
     @user.destroy
     redirect_to :action => :index
+  end
+  
+  protected
+  def find_user
+    @user = User.find(params[:id])
   end
   
   private

@@ -44,11 +44,11 @@ describe "routing to api" do
 
   it "should not reach api with wrong number of parameters" do
     { :get => "/api/#{users(:testuser).api_key}/09064710/full/,120/0/native.png/12345" }.should route_to(
-      :controller => "api", :action => "render_404", :path => "api/#{users(:testuser).api_key}/09064710/full/,120/0/native.png/12345")
+      :controller => "api", :action => "render_error", :path => "api/#{users(:testuser).api_key}/09064710/full/,120/0/native.png/12345")
     { :get => "/api/#{users(:testuser).api_key}/09064710/full/,120" }.should route_to(
-      :controller => "api",:action => "render_404", :path => "api/#{users(:testuser).api_key}/09064710/full/,120")
+      :controller => "api",:action => "render_error", :path => "api/#{users(:testuser).api_key}/09064710/full/,120")
     { :get => "/api/#{users(:testuser).api_key}/09064710" }.should route_to(
-      :controller => "api",:action => "render_404", :path => "api/#{users(:testuser).api_key}/09064710")
+      :controller => "api",:action => "render_error", :path => "api/#{users(:testuser).api_key}/09064710")
   end
 
 end

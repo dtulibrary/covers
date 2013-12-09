@@ -4,9 +4,16 @@ gem 'rails', '3.2.16'
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
-
-gem 'sqlite3'
-gem 'rspec-rails'
+gem 'rmagick', :require => false
+gem 'rsolr'
+gem 'memcache-client'
+gem 'pg'
+gem 'omniauth'
+gem 'omniauth-cas'
+gem 'cancan'
+gem "gelf"
+gem "lograge"
+gem 'jquery-rails'
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -19,7 +26,11 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
-gem 'jquery-rails'
+group :test, :development do
+  gem 'sqlite3'
+  gem 'rspec-rails'
+  gem 'debugger'
+end
 
 group :test do
   gem 'capybara', '1.1.2'
@@ -46,8 +57,3 @@ gem 'rvm-capistrano'
 
 # To use debugger
 # gem 'debugger'
-
-gem 'rmagick', :require => false
-gem 'rsolr'
-gem 'memcache-client'
-gem 'pg'

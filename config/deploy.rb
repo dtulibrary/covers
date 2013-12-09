@@ -1,58 +1,55 @@
-# RVM bootstrap
-# $:.unshift(File.expand_path('./lib', ENV['rvm_path']))
-
-set :rvm_ruby_string, '1.9.3-p194'
-set :rvm_type, :system
-
-require 'rvm/capistrano'
-
-# bundler bootstrap
 require 'bundler/capistrano'
 
-# server details
-set :rails_env, ENV['RAILS_ENV']
+set :rails_env, ENV['RAILS_ENV'] || 'staging'
+set :application, ENV['HOST'] || 'gazo.vagrant.vm'
+set :primoproxy_config, ENV['GAZO_CONFIG'] || "#{rails_env}"
+
+set :deploy_to, "/var/www/#{application}"
+role :web, "#{application}"
+role :app, "#{application}"
+role :db, "#{application}", :primary => true
+
 default_run_options[:pty] = true
+
 ssh_options[:forward_agent] = false
-set :deploy_via, :remote_cache
-set :user, "#{ENV['CAP_USER']}"
+set :user, 'capistrano'
 set :use_sudo, false
+set :copy_exclude, %w(.git jetty feature spec)
 
-# repo details
-set :scm, :git
-set :scm_username, "#{ENV['CAP_USER']}"
-set :repository, "#{ENV['SCM']}"
-if variables.include?(:branch_name)
-  set :branch, "#{branch_name}"
+
+if fetch(:application).end_with?('vagrant.vm')
+  set :scm, :none
+  set :repository, '.'
+  set :deploy_via, :copy
+  set :copy_strategy, :export
+  ssh_options[:keys] = [ENV['IDENTITY'] || './vagrant/puppet-applications/vagrant-modules/vagrant_capistrano_id_dsa']
 else
-  set :branch, "master"
-end  
-set :git_enable_submodules, 1
-
-set :deploy_to, "/var/www/#{ENV['HOST']}"
-set :application, "#{ENV['HOST']}"
-role :web, "#{ENV['HOST']}"                          # Your HTTP server, Apache/etc
-role :app, "#{ENV['HOST']}"                          # This may be the same as your `Web` server
-role :db,  "#{ENV['HOST']}", :primary => true
-
-# if you want to clean up old releases on each deploy uncomment this:
-# after "deploy:restart", "deploy:cleanup"
-namespace :db do
-  task :setup do
-    template = File.read("config/deploy/database.yml.erb")
-    config = ERB.new(template).result(binding)
-    put config, "#{release_path}/config/database.yml"
+  set :deploy_via, :remote_cache
+  set :scm, :git
+  set :scm_username, ENV['CAP_USER']
+  set :repository, ENV['SCM']
+  if variables.include?(:branch_name)
+    set :branch, "#{branch_name}"
+  else
+    set :branch, 'master'
   end
+  set :git_enable_submodules, 1
 end
-namespace :api do
-  task :setup do
-    template = File.read("config/deploy/api.yml.erb")
-    config = ERB.new(template).result(binding)
-    put config, "#{release_path}/config/api.yml"
-  end
-end
-before "deploy:assets:precompile", "db:setup"
-before "deploy:assets:precompile", "api:setup"
+
 # tasks
+
+before "deploy:migrate", "config:symlink"
+after "deploy:update", "deploy:cleanup"
+
+namespace :config do
+  desc "linking configuration to current release"
+  task :symlink do
+    run "ln -nfs #{deploy_to}/shared/config/application.local.rb #{release_path}/config/application.local.rb"
+    run "ln -nfs #{deploy_to}/shared/config/database.yml #{release_path}/config/database.yml"
+    run "ln -nfs #{deploy_to}/shared/config/api.yml #{release_path}/config/api.yml"
+  end
+end
+
 namespace :deploy do
   task :start, :roles => :app do
     run "touch #{current_path}/tmp/restart.txt"
@@ -67,5 +64,3 @@ namespace :deploy do
     run "touch #{current_path}/tmp/restart.txt"
   end
 end
-
-#after "deploy:finalize_update", "deploy:config:generate"

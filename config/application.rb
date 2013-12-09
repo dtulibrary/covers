@@ -58,5 +58,28 @@ module ImageDeliveryService
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+    
+    # Config to be overriden by local settings
+    config.stub_authentication = false;
+    
+    config.cas = {
+      :host => ''
+    }
+       
+    ### API Config ###
+    config.authorized_users =  []
+    
+    config.imagerepository = {
+      :url => '',
+      :service_location_journal => '',
+      :service_location_book => ''
+    }
+    config.solr = {
+      :url => '',
+      :request_handler_journal => '',
+      :request_handler_book => ''
+    }
+    config.iiif_compliance = ""
+    
   end
 end
