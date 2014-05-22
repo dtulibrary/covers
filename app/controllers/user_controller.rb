@@ -3,30 +3,30 @@ require 'securerandom'
 class UserController < ApplicationController
   #http_basic_authenticate_with :name => (API_CONFIG['authentication'] ? API_CONFIG['authentication']['username'] : ''), :password => (API_CONFIG['authentication'] ? API_CONFIG['authentication']['password'] : '')
   before_filter :authenticate
-  before_filter :find_user, :only => [:show, :edit, :delete]  
-  
+  before_filter :find_user, :only => [:show, :edit, :delete]
+
   attr_accessor :users, :user
-  
+
   def index
     @users = User.find(:all)
   end
-  
+
   def cache_reset
     Rails.cache.clear
     redirect_to user_path,:flash=>{:success => "The cache was cleared!"}
   end
-  
+
   def show
     # @user = User.find(params[:id])#:first,:conditions=>{:api_key=>params[:id]})
   end
-  
+
   def new
   end
-  
+
   def edit
     # @user = User.find(params[:id])
   end
-  
+
   def update
     # Validate params
     data = params[:user]
@@ -35,7 +35,7 @@ class UserController < ApplicationController
       flash[:error] = "Invalid parameter: #{invalid_param}"
       redirect_to :action => :edit,:id=>params[:id]
     else
-      @user = User.find(params[:id])#:first,:conditions=>{:api_key=>params[:id]}
+      @user = User.find(params[:id])
       if @user.update_attributes(params[:user])
         redirect_to :action => :show, :id => @user.api_key
       else
@@ -43,18 +43,18 @@ class UserController < ApplicationController
       end
     end
   end
-  
+
   def create
     # Validate params
     data = params[:user]
     data,invalid,invalid_param = validate_params(data)
     if invalid
       flash[:error] = "Invalid parameter: #{invalid_param}"
-      render :new #:action => 
+      render :new #:action =>
     else
       # Create user
       api_key = SecureRandom.urlsafe_base64(15)
-      while User.find(:first,:conditions=>{:api_key=>api_key})#:first,:conditions=>{'api_key'=>api_key})
+      while User.find(:first,:conditions=>{:api_key=>api_key})
         api_key = SecureRandom.urlsafe_base64(15)
       end
       data['api_key'] = api_key
@@ -63,25 +63,25 @@ class UserController < ApplicationController
       redirect_to :action => :show, :id => @user.api_key
     end
   end
-  
+
   def delete
     # @user = User.find(params[:id])
     @user.destroy
     redirect_to :action => :index
   end
-  
+
   protected
   def find_user
     @user = User.find(params[:id])
   end
-  
+
   private
   def validate_params(data)
     codes = [200,404]
     invalid = false
     invalid_param = ''
     data[:on_missing_image] = data[:on_missing_image].to_i
-    data[:on_missing_title] = data[:on_missing_title].to_i 
+    data[:on_missing_title] = data[:on_missing_title].to_i
     if not data[:sn] =~ /\w+/
       invalid=true
       invalid_param = 'Short name'

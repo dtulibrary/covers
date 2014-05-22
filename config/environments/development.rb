@@ -11,7 +11,7 @@ ImageDeliveryService::Application.configure do
 
   # Show full error reports and disable caching
   config.consider_all_requests_local       = true
-  config.action_controller.perform_caching = true#false
+  config.action_controller.perform_caching = true
 
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false
@@ -39,7 +39,10 @@ ImageDeliveryService::Application.configure do
   config.cache_store = :mem_cache_store
 
   # Set (custom) application specific configurations
-  config.cache_duration = 1 # (in minutes) (one week = 60*24*7)
+  config.cache_duration = 1 # (in minutes)
+
+  # Prepend all log lines with the following tags
+  config.log_tags = [ :uuid ]
 end
 
 if File.exists? File.dirname(__FILE__) + '/../application.local.rb'

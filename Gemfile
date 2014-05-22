@@ -1,19 +1,12 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.17'
+gem 'rails', '3.2.18'
 
-# Bundle edge Rails instead:
-# gem 'rails', :git => 'git://github.com/rails/rails.git'
 gem 'rmagick', :require => false
 gem 'rsolr'
 gem 'memcache-client'
 gem 'pg'
-gem 'omniauth'
-gem 'omniauth-cas'
-gem 'cancan'
-gem "gelf"
-gem "lograge"
-gem 'jquery-rails'
+gem 'omniauth-cas', '1.0.1'
 
 group :assets do
   gem 'sass-rails'
@@ -32,7 +25,7 @@ group :test, :development do
 end
 
 group :test do
-  gem 'capybara', '1.1.2'
+  gem 'capybara'
   gem 'webmock'
 end
 
@@ -41,18 +34,5 @@ group :development do
   gem 'rails_best_practices'
 end
 
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
 # Deploy with Capistrano
 gem 'capistrano'
-gem 'rvm-capistrano'
-
-# To use debugger
-# gem 'debugger'
