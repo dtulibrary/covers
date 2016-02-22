@@ -16,4 +16,4 @@ services:
     ports:
       - "3002:3000"
     depends_on:
-      - docdel-db
+      - covers-db
