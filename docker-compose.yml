@@ -1,0 +1,19 @@
+# Usage
+# create the db (only the first time)
+# docker-compose run web rake db:setup
+
+version: '2'
+
+services:
+  covers-db:
+    image: postgres
+
+  covers-web:
+    build: .
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    volumes:
+      - .:/myapp
+    ports:
+      - "3002:3000"
+    depends_on:
+      - docdel-db
