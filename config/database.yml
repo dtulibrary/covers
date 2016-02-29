@@ -6,11 +6,11 @@
 development:
   adapter: postgresql
   encoding: unicode
-  database: postgres
+  database: covers
   pool: 5
-  username: postgres
-  password:
-  host: covers-db
+  username: db
+  password: db
+  host: db
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
