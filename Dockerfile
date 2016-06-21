@@ -8,6 +8,9 @@ RUN apt-get update -qq && apt-get install -y \
   libxml2-dev \
   libxslt1-dev \
   libsqlite3-dev \
+  imagemagick \
+  libmagickcore-dev \
+  libmagickwand-dev \
   bundler
 
 RUN mkdir /myapp
