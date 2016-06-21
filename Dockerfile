@@ -10,9 +10,6 @@ RUN apt-get update -qq && apt-get install -y \
   libsqlite3-dev \
   bundler
 
-# for nokogiri
-ENV NOKOGIRI_USE_SYSTEM_LIBRARIES 1
-
 RUN mkdir /myapp
 WORKDIR /myapp
 ADD Gemfile /myapp/Gemfile
