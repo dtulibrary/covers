@@ -1,5 +1,6 @@
 #!groovy
 
+
 node('dockerslave') {
 
   stage('Clean environment'){
