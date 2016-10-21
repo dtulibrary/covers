@@ -25,5 +25,4 @@ node('dockerslave') {
   stage('Integration test?'){
     sh "echo I should run  ./itest.sh "
   }
-
 }
