@@ -116,3 +116,4 @@ Below are a couple of example requests to our demo proxy implementation. It shou
         # Info requests:
         http://imageservicedemo.dtic.dk/09064710/info.xml
         http://imageservicedemo.dtic.dk/09064710/info.json
+
