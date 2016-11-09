@@ -1,4 +1,4 @@
-FROM debian:7.10
+FROM debian:8.6
 
 RUN apt-get update -qq && apt-get install -y \
   ruby \
@@ -17,6 +17,10 @@ RUN mkdir /myapp
 WORKDIR /myapp
 ADD Gemfile /myapp/Gemfile
 ADD Gemfile.lock /myapp/Gemfile.lock
+
+#RUN useradd -ms /bin/bash dtuuser
+#USER dtuuser
+
 RUN bundle install
 ADD . /myapp
 
